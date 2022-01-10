@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-import time
+import asyncio
 from pygame import mixer
 
 
@@ -12,6 +11,12 @@ def alarm():
         continue
     mixer.quit()
 
+async def main(work_interval, rest_interval):
+    while True:
+        await asyncio.sleep(work_interval * 60)
+        alarm()
+        await asyncio.sleep(rest_interval * 60)
+        alarm()
 
 try:
     work_interval = float(input('Work time interval (minutes): '))
@@ -22,8 +27,4 @@ except:
     work_interval = 50
     rest_interval = 10
 
-while True:
-    time.sleep(work_interval * 60)
-    alarm()
-    time.sleep(rest_interval * 60)
-    alarm()
+asyncio.run(main(work_interval, rest_interval))
